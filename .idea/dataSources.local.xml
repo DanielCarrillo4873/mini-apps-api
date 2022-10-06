@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="WS-222.4167.31">
+    <data-source name="Mini Apps" uuid="1c5385d9-0717-4be3-a672-d2c728686bf8">
+      <database-info product="Mongo DB" version="6.0.1" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.15" dbms="MONGO" exact-version="6.0.1" exact-driver-version="1.15" />
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema">
+            <name qname="@" />
+            <name qname="mini-apps" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+  </component>
+</project>

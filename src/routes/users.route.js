@@ -8,20 +8,19 @@
 import { Router } from 'express';
 import contentTypeJson from '../middlewares/content-type-json.js';
 import requestSchemaValidation from '../middlewares/request-schema-validation.js';
-import newUserRequestSchema from '../requests-schema-body/new-user.requestschema.js';
+import { newUserRequestSchema, updateUserRequestSchema } from '../requests-schema-body/users.requestschema.js';
 import {
-  // eslint-disable-next-line import/named
   getUser, createUser, updateUser, deleteUser,
 } from '../controllers/users.controller.js';
 
 const router = new Router();
 
-router.get('/:userId', getUser);
+router.get('/:username', getUser);
 
 router.post('/', contentTypeJson, requestSchemaValidation(newUserRequestSchema), createUser);
 
-router.patch('/:userId', updateUser);
+router.patch('/:username', requestSchemaValidation(updateUserRequestSchema), updateUser);
 
-router.delete('/:userId', deleteUser);
+router.delete('/:username', deleteUser);
 
 export default router;

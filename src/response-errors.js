@@ -39,10 +39,22 @@ export const serverError = {
 export function requestSchemaInvalid(field, error, value) {
   return {
     error: 'request-schema-body-invalid',
-    description: 'The schema for the body request you provided is invalid',
+    description: 'The schema for the request you provided is invalid',
     details: {
       field,
       error,
+      value: value || '',
+    },
+  };
+}
+
+export function resourceNotFound(resource, identifiedBy, value) {
+  return {
+    error: 'resource-not-found',
+    description: 'The resource you are trying to find not exist',
+    details: {
+      resource,
+      identifiedBy,
       value: value || '',
     },
   };

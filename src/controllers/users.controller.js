@@ -6,29 +6,86 @@
 * */
 
 import database from '../database.js';
-import { serverError } from '../response-errors.js';
+import { serverError, requestSchemaInvalid, resourceNotFound } from '../response-errors.js';
 
 const user = database.db('mini-apps').collection('user');
 
 export async function getUser(req, res) {
-  res.send('Get user');
-}
-
-export async function createUser(req, res) {
   try {
-    const result = await user.insertOne(req.body);
-    const newUser = await user.findOne({ _id: result.insertedId });
-    res.status(201);
-    res.json(newUser);
+    const { username } = req.params;
+    const u = await user.findOne({ username });
+    if (u) {
+      res.status(200);
+      res.json(u);
+    } else {
+      res.status(404);
+      res.json(resourceNotFound('user', 'username', username));
+    }
   } catch {
     res.status(500);
     res.json(serverError);
   }
 }
+
+export async function createUser(req, res) {
+  try {
+    let newUser = req.body;
+    const validUsername = await user.findOne({ username: newUser.username });
+    const validEmail = await user.findOne({ email: newUser.email });
+    if (validUsername) {
+      res.status(400);
+      res.json(requestSchemaInvalid('username', 'Username already exist', newUser.username));
+    } else if (validEmail) {
+      res.status(400);
+      res.json(requestSchemaInvalid('email', 'Email already exist', newUser.email));
+    } else {
+      const result = await user.insertOne(newUser);
+      newUser = await user.findOne({ _id: result.insertedId });
+      res.status(201);
+      res.json(newUser);
+    }
+  } catch {
+    res.status(500);
+    res.json(serverError);
+  }
+}
+
+// TODO: Optimize this this controller
 export async function updateUser(req, res) {
-  res.send('Update user');
+  try {
+    const { username, email } = req.body;
+    const validUsername = await user.findOne({ username });
+    const validEmail = await user.findOne({ email });
+    if (validUsername) {
+      res.status(400);
+      res.json(requestSchemaInvalid('username', 'Username already exists.', username));
+    } else if (validEmail) {
+      res.status(400);
+      res.json(requestSchemaInvalid('email', 'Email already exist.', email));
+    } else {
+      await user.updateOne({ username: req.params.username }, { $set: req.body });
+      res.json();
+    }
+  } catch {
+    res.status(500);
+    res.json(serverError);
+  }
 }
 
 export async function deleteUser(req, res) {
-  res.send('Deleter user');
+  try {
+    const { username } = req.params;
+    const deleted = await user.findOne({ username });
+    const result = await user.deleteOne({ username });
+    if (result.deletedCount) {
+      res.status(200);
+      res.json(deleted);
+    } else {
+      res.status(404);
+      res.json(resourceNotFound('user', 'username', username));
+    }
+  } catch {
+    res.status(500);
+    res.json(serverError);
+  }
 }

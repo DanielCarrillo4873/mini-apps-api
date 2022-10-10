@@ -50,21 +50,26 @@ export async function createUser(req, res) {
   }
 }
 
-// TODO: Optimize this this controller
 export async function updateUser(req, res) {
   try {
-    const { username, email } = req.body;
-    const validUsername = await user.findOne({ username });
-    const validEmail = await user.findOne({ email });
-    if (validUsername) {
-      res.status(400);
-      res.json(requestSchemaInvalid('username', 'Username already exists.', username));
-    } else if (validEmail) {
-      res.status(400);
-      res.json(requestSchemaInvalid('email', 'Email already exist.', email));
+    const u = await user.findOne({ username: req.params.username });
+    if (u) {
+      const { username, email } = req.body;
+      const validUsername = await user.findOne({ username });
+      const validEmail = await user.findOne({ email });
+      if (validUsername) {
+        res.status(400);
+        res.json(requestSchemaInvalid('username', 'Username already exists.', username));
+      } else if (validEmail) {
+        res.status(400);
+        res.json(requestSchemaInvalid('email', 'Email already exist.', email));
+      } else {
+        await user.updateOne({ username: req.params.username }, { $set: req.body });
+        res.json({ ok: 1 });
+      }
     } else {
-      await user.updateOne({ username: req.params.username }, { $set: req.body });
-      res.json();
+      res.status(400);
+      res.json(requestSchemaInvalid('username', 'Username does not exist.', req.params.username));
     }
   } catch {
     res.status(500);

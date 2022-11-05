@@ -7,7 +7,7 @@
 *   - Connects to database
 *   - Run HTTP server if needed requirements are present
 *
-*   * Needed requirements
+*   **** Needed requirements ****
 *   - Connection to mongoDB instance
 *   - Provided or default port free
 *

@@ -32,7 +32,7 @@ export const serverError = {
   error: 'server-internal-error',
   description: 'There has been an internal error',
   detail: {
-    apologize: 'Sorry we are trying to solve this problem try later.',
+    apologize: 'Sorry we are trying to solve this problem, try later.',
   },
 };
 

@@ -3,8 +3,14 @@
 *   Users Controllers
 *   Function definitions for users controllers
 *
+*   - Get a user by user
+*   - Create a user
+*   - Update one user
+*   - Delete one user by username
+*
 * */
 
+import { createHash } from 'crypto';
 import database from '../database.js';
 import { serverError, requestSchemaInvalid, resourceNotFound } from '../response-errors.js';
 
@@ -13,7 +19,7 @@ const user = database.db('mini-apps').collection('user');
 export async function getUser(req, res) {
   try {
     const { username } = req.params;
-    const u = await user.findOne({ username });
+    const u = await user.findOne({ username }, { projection: { password: 0 } });
     if (u) {
       res.status(200);
       res.json(u);
@@ -39,8 +45,14 @@ export async function createUser(req, res) {
       res.status(400);
       res.json(requestSchemaInvalid('email', 'Email already exist', newUser.email));
     } else {
+      const hashPassword = createHash('sha256');
+      hashPassword.update(newUser.password);
+      newUser.password = hashPassword.digest('hex');
       const result = await user.insertOne(newUser);
-      newUser = await user.findOne({ _id: result.insertedId });
+      newUser = await user.findOne(
+        { _id: result.insertedId },
+        { projection: { password: 0 } },
+      );
       res.status(201);
       res.json(newUser);
     }

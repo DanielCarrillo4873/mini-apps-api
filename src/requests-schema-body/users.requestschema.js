@@ -17,3 +17,9 @@ export const updateUserRequestSchema = joi.object({
   email: joi.string().email(),
   username: joi.string(),
 }).or('email', 'username');
+
+export const authenticateUserSchema = joi.object({
+  email: joi.string().email(),
+  username: joi.string(),
+  password: joi.string().min(6).required(),
+}).or('username', 'email');

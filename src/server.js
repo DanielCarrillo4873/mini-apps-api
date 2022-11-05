@@ -11,8 +11,14 @@
 
 import express from 'express';
 import morgan from 'morgan';
+import contentTypeJson from './middlewares/content-type-json.js';
+import requestSchemaValidation from './middlewares/request-schema-validation.js';
 import { routeNotFound } from './response-errors.js';
+import { authenticateUserSchema } from './requests-schema-body/users.requestschema.js';
+
+// Routes/Controllers
 import usersRouter from './routes/users.route.js';
+import authController from './controllers/auth.controller.js';
 
 const server = express();
 
@@ -32,6 +38,9 @@ server.get('/', (req, res) => {
 
 // Users routes
 server.use('/users', usersRouter);
+
+// Authentication route
+server.post('/auth', contentTypeJson, requestSchemaValidation(authenticateUserSchema), authController);
 
 // Route to catch all non-existing routes
 server.all('*', (req, res) => {

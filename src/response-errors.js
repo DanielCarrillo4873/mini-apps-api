@@ -59,3 +59,21 @@ export function resourceNotFound(resource, identifiedBy, value) {
     },
   };
 }
+
+export const noAccessToken = {
+  error: 'no-access-token',
+  description: 'No access token token was provided.',
+  detail: {
+    header: 'access-token header no was provided',
+  },
+};
+
+export function accessTokenInvalid(accessToken) {
+  return {
+    error: 'access-token-invalid',
+    description: 'The provided access token was invalid.',
+    detail: {
+      'access-token': accessToken,
+    },
+  };
+}

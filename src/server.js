@@ -15,6 +15,7 @@ import contentTypeJson from './middlewares/content-type-json.js';
 import requestSchemaValidation from './middlewares/request-schema-validation.js';
 import { routeNotFound } from './response-errors.js';
 import { authenticateUserSchema } from './requests-schema-body/users.requestschema.js';
+import { NODE_ENV } from './settings.js';
 
 // Routes/Controllers
 import usersRouter from './routes/users.route.js';
@@ -23,8 +24,12 @@ import authController from './controllers/auth.controller.js';
 const server = express();
 
 // Middlewares
-server.use(morgan('dev'));
 server.use(express.json());
+
+// Dev middlewares
+if (NODE_ENV === 'DEVELOPMENT') {
+  server.use(morgan('dev'));
+}
 
 // Entry point
 server.get('/', (req, res) => {

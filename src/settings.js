@@ -21,3 +21,5 @@ export const DATABASE_URI = process.env.DATABASE_URI || 'mongodb://localhost/';
 export const JSONWEBTOKEN_KEY = process.env.JSONWEBTOKEN_KEY || 'JS0NW3BT0K3NK3Y';
 // App mode DEVELOPMENT | PRODUCTION
 export const NODE_ENV = 'DEVELOPMENT';
+// Number of salts to encrypt password
+export const SALTS = 10;

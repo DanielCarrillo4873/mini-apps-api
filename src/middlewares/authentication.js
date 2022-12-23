@@ -19,6 +19,7 @@ function authentication(req, res, next) {
       if (err) {
         res.status(400);
         res.json(accessTokenInvalid(accessToken));
+      } else {
         req.decoded = decoded;
         next();
       }

@@ -17,10 +17,10 @@ export function contentTypeNotJson(contentType) {
   };
 }
 
-export function routeNotFound(route, method) {
+export function endPointNotFound(route, method) {
   return {
-    error: 'route-not-exit',
-    description: 'The route you trying to access does not exist.',
+    error: 'endpoint-not-exit',
+    description: 'The end point you trying to access does not exist.',
     details: {
       route,
       method,
@@ -62,9 +62,9 @@ export function resourceNotFound(resource, identifiedBy, value) {
 
 export const noAccessToken = {
   error: 'no-access-token',
-  description: 'No access token token was provided.',
+  description: 'No access token was provided.',
   detail: {
-    header: 'access-token header no was provided',
+    header: 'access-token header was not provided',
   },
 };
 

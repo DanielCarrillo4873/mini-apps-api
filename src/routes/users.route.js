@@ -12,16 +12,20 @@ import { newUserRequestSchema, updateUserRequestSchema } from '../requests-schem
 import {
   getUser, createUser, updateUser, deleteUser,
 } from '../controllers/users.controller.js';
+import authentication from '../middlewares/authentication.js';
 
 const router = new Router();
 
 // Get a user by username
-router.get('/:username', getUser);
+router.get('/:username', authentication, getUser);
+
+// Create a user - Sing up
+router.post('/', contentTypeJson, requestSchemaValidation(newUserRequestSchema), createUser);
 
 // Update user information
-router.patch('/:username', requestSchemaValidation(updateUserRequestSchema), updateUser);
+router.patch('/:username', requestSchemaValidation(updateUserRequestSchema), authentication, updateUser);
 
 // Delete a user by username - Delete account
-router.delete('/:username', deleteUser);
+router.delete('/:username', authentication, deleteUser);
 
 export default router;

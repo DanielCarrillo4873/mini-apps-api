@@ -22,7 +22,6 @@ export const updateUserRequestSchema = joi.object({
 
 // Schema to authenticate a user
 export const authenticateUserSchema = joi.object({
-  email: joi.string().email(),
-  username: joi.string(),
-  password: joi.string().min(6).required(),
-}).or('username', 'email');
+  clientIdentifier: joi.string().required(),
+  clientSecret: joi.string().min(6).required(),
+});

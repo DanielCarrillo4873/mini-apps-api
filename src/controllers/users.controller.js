@@ -10,9 +10,10 @@
 *
 * */
 
-import { createHash } from 'crypto';
+import { hash } from 'bcrypt';
 import database from '../database.js';
 import { serverError, requestSchemaInvalid, resourceNotFound } from '../response-errors.js';
+import { SALTS } from '../settings.js';
 
 const user = database.db('mini-apps').collection('user');
 
@@ -45,9 +46,7 @@ export async function createUser(req, res) {
       res.status(400);
       res.json(requestSchemaInvalid('email', 'Email already exist', newUser.email));
     } else {
-      const hashPassword = createHash('sha256');
-      hashPassword.update(newUser.password);
-      newUser.password = hashPassword.digest('hex');
+      newUser.password = await hash(newUser.password, SALTS);
       const result = await user.insertOne(newUser);
       newUser = await user.findOne(
         { _id: result.insertedId },

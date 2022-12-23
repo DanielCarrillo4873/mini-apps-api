@@ -8,10 +8,10 @@
 import { Router } from 'express';
 import contentTypeJson from '../middlewares/content-type-json.js';
 import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
-import { newUserRequestSchema, updateUserRequestSchema } from '../request-body-schemas/users.requestschema.js';
+import { newUserRequestSchema, updateUserRequestSchema } from '../request-body-schemas/accounts.requestschema.js';
 import {
   getUser, createUser, updateUser, deleteUser,
-} from '../controllers/users.controller.js';
+} from '../controllers/accounts.controller.js';
 import authentication from '../middlewares/authentication.js';
 
 const router = new Router();

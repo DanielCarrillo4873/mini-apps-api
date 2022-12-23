@@ -6,10 +6,10 @@
  * */
 
 import { Router } from 'express';
-import usersRouter from './users.route.js';
+import usersRouter from './accounts.route.js';
 import contentTypeJson from '../middlewares/content-type-json.js';
 import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
-import { authenticateUserSchema } from '../request-body-schemas/users.requestschema.js';
+import { authenticateUserSchema } from '../request-body-schemas/accounts.requestschema.js';
 import authController from '../controllers/auth.controller.js';
 
 const router = Router();

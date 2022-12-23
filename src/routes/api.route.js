@@ -6,7 +6,7 @@
  * */
 
 import { Router } from 'express';
-import usersRouter from './accounts.route.js';
+import accountsRouter from './accounts.route.js';
 import contentTypeJson from '../middlewares/content-type-json.js';
 import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
 import { authenticateUserSchema } from '../request-body-schemas/accounts.requestschema.js';
@@ -30,10 +30,10 @@ router.post('/auth', contentTypeJson, requestBodySchemaValidation(authenticateUs
 // Sign up route
 router.post('/signup', (req, res) => {
   // noinspection JSDeprecatedSymbols
-  res.redirect('users', 308);
+  res.redirect('accounts', 308);
 });
 
 // Users routes
-router.use('/users', usersRouter);
+router.use('/accounts', accountsRouter);
 
 export default router;

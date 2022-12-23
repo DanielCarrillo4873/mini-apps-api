@@ -1,7 +1,7 @@
 /*
 *
-*   Request Schema middleware
-*   Check body request schema
+*   Request body schema validation middleware
+*   Check request body schema to be valid
 *
 * */
 

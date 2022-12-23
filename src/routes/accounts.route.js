@@ -8,24 +8,24 @@
 import { Router } from 'express';
 import contentTypeJson from '../middlewares/content-type-json.js';
 import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
-import { newUserRequestSchema, updateUserRequestSchema } from '../request-body-schemas/accounts.requestschema.js';
+import { newAccountRequestSchema, updateAccountRequestSchema } from '../request-body-schemas/accounts.requestschema.js';
 import {
-  getUser, createUser, updateUser, deleteUser,
+  getAccount, createAccount, updateAccount, deleteAccount,
 } from '../controllers/accounts.controller.js';
 import authentication from '../middlewares/authentication.js';
 
 const router = new Router();
 
-// Get a user by username
-router.get('/:username', authentication, getUser);
+// Get account information by username
+router.get('/:username', authentication, getAccount);
 
-// Create a user - Sing up
-router.post('/', contentTypeJson, requestBodySchemaValidation(newUserRequestSchema), createUser);
+// Create new account - Sing up
+router.post('/', contentTypeJson, requestBodySchemaValidation(newAccountRequestSchema), createAccount);
 
-// Update user information
-router.patch('/:username', requestBodySchemaValidation(updateUserRequestSchema), authentication, updateUser);
+// Update account information
+router.patch('/:username', requestBodySchemaValidation(updateAccountRequestSchema), authentication, updateAccount);
 
-// Delete a user by username - Delete account
-router.delete('/:username', authentication, deleteUser);
+// Delete account by username - Delete account
+router.delete('/:username', authentication, deleteAccount);
 
 export default router;

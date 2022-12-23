@@ -1,13 +1,13 @@
 /*
 *
-*   New User Request Schema
+*   Request body schemas for accounts
 *
 * */
 
 import joi from 'joi';
 
 // Schema to create a new user
-export const newUserRequestSchema = joi.object({
+export const newAccountRequestSchema = joi.object({
   email: joi.string().required().email(),
   username: joi.string().required(),
   password: joi.string().required().min(6),
@@ -15,7 +15,7 @@ export const newUserRequestSchema = joi.object({
 });
 
 // Schema to update a user
-export const updateUserRequestSchema = joi.object({
+export const updateAccountRequestSchema = joi.object({
   email: joi.string().email(),
   username: joi.string(),
 }).or('email', 'username');

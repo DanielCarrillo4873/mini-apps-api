@@ -1,12 +1,12 @@
 /*
 *
-*   Users Controllers
-*   Function definitions for users controllers
+*   Accounts Controllers
+*   Function definitions for Account controllers
 *
-*   - Get a user by user
-*   - Create a user
-*   - Update one user
-*   - Delete one user by username
+*   - Get an account by username
+*   - Create an account
+*   - Update an account by username
+*   - Delete an account by username
 *
 * */
 
@@ -15,9 +15,9 @@ import database from '../database.js';
 import { serverError, requestBodySchemaInvalid, resourceNotFound } from '../response-errors.js';
 import { SALTS } from '../settings.js';
 
-const user = database.db('mini-apps').collection('user');
+const user = database.db('mini-apps').collection('accounts');
 
-export async function getUser(req, res) {
+export async function getAccount(req, res) {
   try {
     const { username } = req.params;
     const u = await user.findOne({ username }, { projection: { password: 0 } });
@@ -34,7 +34,7 @@ export async function getUser(req, res) {
   }
 }
 
-export async function createUser(req, res) {
+export async function createAccount(req, res) {
   try {
     let newUser = req.body;
     const validUsername = await user.findOne({ username: newUser.username });
@@ -61,7 +61,7 @@ export async function createUser(req, res) {
   }
 }
 
-export async function updateUser(req, res) {
+export async function updateAccount(req, res) {
   try {
     const u = await user.findOne({ username: req.params.username });
     if (u) {
@@ -88,7 +88,7 @@ export async function updateUser(req, res) {
   }
 }
 
-export async function deleteUser(req, res) {
+export async function deleteAccount(req, res) {
   try {
     const { username } = req.params;
     const deleted = await user.findOne({ username });

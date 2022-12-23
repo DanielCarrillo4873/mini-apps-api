@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Routes" pattern="file[mini-apps-api]:src/routes/*" />
+</component>

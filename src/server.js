@@ -44,6 +44,9 @@ server.get('/', (req, res) => {
 // Users routes
 server.use('/users', usersRouter);
 
+// Sign up route
+router.post('/', contentTypeJson, requestSchemaValidation(newUserRequestSchema), createUser);
+
 // Authentication route
 server.post('/auth', contentTypeJson, requestSchemaValidation(authenticateUserSchema), authController);
 

@@ -15,12 +15,13 @@ import {
 
 const router = new Router();
 
+// Get a user by username
 router.get('/:username', getUser);
 
-router.post('/', contentTypeJson, requestSchemaValidation(newUserRequestSchema), createUser);
-
+// Update user information
 router.patch('/:username', requestSchemaValidation(updateUserRequestSchema), updateUser);
 
+// Delete a user by username - Delete account
 router.delete('/:username', deleteUser);
 
 export default router;

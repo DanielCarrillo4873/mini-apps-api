@@ -2,14 +2,17 @@
 
 API Rest for mini-apps application. Handles all request, except for frontend app request.
 
+## Environment variables
+- PORT: Defines the port to run HTTP server.
+- DATABASE_URI: Defines the URI to connect to mongoDB instance.
+- JSONWEBTOKEN_KEY: Defines key to encrypt JWT token.
+- NODE_ENV: Defines the execution mode.
+- SALT: Defines the quantity of salt for password encryption.
+
 ## Run
 
 ### Production
 Declare needed env variables
-- PORT
-- DATABASE_URI
-- JSONWEBTOKEN_KEY
-- NODE_ENV
 
 In .evn file or through command line env variables declaration.
 
@@ -39,14 +42,15 @@ npm run serve
 
 ## Modes
 
-This application has two modes: **DEVELOPMENT** and **PRODUCTION**. In **DEVELOPMENT** mode morgan usage is available which
-permit prompts to be sent to STDOUT witch every request. In **PRODUCTION** mode this feature will be disabled.
+This application has two modes: **DEVELOPMENT** and **PRODUCTION**. In **DEVELOPMENT** mode morgan usage is available, which
+permit prompts to be sent to STDOUT with every request. In **PRODUCTION** mode this feature will be disabled.
 
 ## Default settings
 
-Default setting are set in settings.js file.
+Default setting are set in src/settings.js file.
 
 - PORT: 3000
 - DATABASE_URI: mongodb://localhost/
 - JSONWEBTOKEN_KEY: JS0NW3BT0K3NK3Y
 - NODE_ENV: DEVELOPMENT
+- SALT: 10

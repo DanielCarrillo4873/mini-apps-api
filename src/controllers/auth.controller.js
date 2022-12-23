@@ -12,7 +12,7 @@
 import jsonwebtoken from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 import mongoClient from '../database.js';
-import { requestSchemaInvalid, serverError } from '../response-errors.js';
+import { requestBodySchemaInvalid, serverError } from '../response-errors.js';
 import { JSONWEBTOKEN_KEY } from '../settings.js';
 
 const users = mongoClient.db('mini-apps').collection('user');
@@ -49,11 +49,11 @@ export default async function auth(req, res) {
         );
       } else {
         res.status(400);
-        res.json(requestSchemaInvalid('clientSecret', 'client Secret not valid'));
+        res.json(requestBodySchemaInvalid('clientSecret', 'client Secret not valid'));
       }
     } else {
       res.status(400);
-      res.json(requestSchemaInvalid('username/email', 'Not found', clientIdentifier));
+      res.json(requestBodySchemaInvalid('username/email', 'Not found', clientIdentifier));
     }
   } catch {
     res.status(500);

@@ -8,8 +8,8 @@
 import { Router } from 'express';
 import usersRouter from './users.route.js';
 import contentTypeJson from '../middlewares/content-type-json.js';
-import requestSchemaValidation from '../middlewares/request-schema-validation.js';
-import { authenticateUserSchema } from '../requests-schema-body/users.requestschema.js';
+import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
+import { authenticateUserSchema } from '../request-body-schemas/users.requestschema.js';
 import authController from '../controllers/auth.controller.js';
 
 const router = Router();
@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 });
 
 // Authentication route
-router.post('/auth', contentTypeJson, requestSchemaValidation(authenticateUserSchema), authController);
+router.post('/auth', contentTypeJson, requestBodySchemaValidation(authenticateUserSchema), authController);
 
 // Sign up route
 router.post('/signup', (req, res) => {

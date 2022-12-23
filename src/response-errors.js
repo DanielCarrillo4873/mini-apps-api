@@ -19,7 +19,7 @@ export function contentTypeNotJson(contentType) {
 
 export function endPointNotFound(route, method) {
   return {
-    error: 'endpoint-not-exit',
+    error: 'end-point-not-exist',
     description: 'The end point you trying to access does not exist.',
     details: {
       route,
@@ -36,9 +36,9 @@ export const serverError = {
   },
 };
 
-export function requestSchemaInvalid(field, error, value) {
+export function requestBodySchemaInvalid(field, error, value) {
   return {
-    error: 'request-schema-body-invalid',
+    error: 'request-body-schema-invalid',
     description: 'The schema for the request you provided is invalid',
     details: {
       field,
@@ -64,13 +64,13 @@ export const noAccessToken = {
   error: 'no-access-token',
   description: 'No access token was provided.',
   detail: {
-    header: 'access-token header was not provided',
+    header: 'access-token header was not present in request headers.',
   },
 };
 
 export function accessTokenInvalid(accessToken) {
   return {
-    error: 'access-token-invalid',
+    error: 'invalid-access-token',
     description: 'The provided access token was invalid.',
     detail: {
       'access-token': accessToken,

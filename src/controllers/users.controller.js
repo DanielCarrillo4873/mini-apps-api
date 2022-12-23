@@ -12,7 +12,7 @@
 
 import { hash } from 'bcrypt';
 import database from '../database.js';
-import { serverError, requestSchemaInvalid, resourceNotFound } from '../response-errors.js';
+import { serverError, requestBodySchemaInvalid, resourceNotFound } from '../response-errors.js';
 import { SALTS } from '../settings.js';
 
 const user = database.db('mini-apps').collection('user');
@@ -41,10 +41,10 @@ export async function createUser(req, res) {
     const validEmail = await user.findOne({ email: newUser.email });
     if (validUsername) {
       res.status(400);
-      res.json(requestSchemaInvalid('username', 'Username already exist', newUser.username));
+      res.json(requestBodySchemaInvalid('username', 'Username already exist', newUser.username));
     } else if (validEmail) {
       res.status(400);
-      res.json(requestSchemaInvalid('email', 'Email already exist', newUser.email));
+      res.json(requestBodySchemaInvalid('email', 'Email already exist', newUser.email));
     } else {
       newUser.password = await hash(newUser.password, SALTS);
       const result = await user.insertOne(newUser);
@@ -70,17 +70,17 @@ export async function updateUser(req, res) {
       const validEmail = await user.findOne({ email });
       if (validUsername) {
         res.status(400);
-        res.json(requestSchemaInvalid('username', 'Username already exists.', username));
+        res.json(requestBodySchemaInvalid('username', 'Username already exists.', username));
       } else if (validEmail) {
         res.status(400);
-        res.json(requestSchemaInvalid('email', 'Email already exist.', email));
+        res.json(requestBodySchemaInvalid('email', 'Email already exist.', email));
       } else {
         await user.updateOne({ username: req.params.username }, { $set: req.body });
         res.json({ ok: 1 });
       }
     } else {
       res.status(400);
-      res.json(requestSchemaInvalid('username', 'Username does not exist.', req.params.username));
+      res.json(requestBodySchemaInvalid('username', 'Username does not exist.', req.params.username));
     }
   } catch {
     res.status(500);

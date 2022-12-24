@@ -1,10 +1,18 @@
-/*
+/**
 *
 *   Response-errors
 *   Creates responses body for unsuccessful operations and errors that occur
 *
 *   - Definition for functions and objects that structure body responses for errors
 *
+ */
+
+/**
+ * Response error
+ * @typedef {Object} ResponseError
+ * @property {String} error - Error name in kebab case
+ * @property {String} description - Error description
+ * @property {Object} detail - Details related to error
  */
 
 export function contentTypeNotJson(contentType) {
@@ -21,7 +29,7 @@ export function endPointNotFound(route, method) {
   return {
     error: 'end-point-not-exist',
     description: 'The end point you trying to access does not exist.',
-    details: {
+    detail: {
       route,
       method,
     },
@@ -40,7 +48,7 @@ export function requestBodySchemaInvalid(field, error, value) {
   return {
     error: 'request-body-schema-invalid',
     description: 'The schema for the request you provided is invalid',
-    details: {
+    detail: {
       field,
       error,
       value: value || '',
@@ -52,7 +60,7 @@ export function resourceNotFound(resource, identifiedBy, value) {
   return {
     error: 'resource-not-found',
     description: 'The resource you are trying to find not exist',
-    details: {
+    detail: {
       resource,
       identifiedBy,
       value: value || '',

@@ -3,27 +3,3 @@ GET {{HOST}}:{{PORT}}/{{API}}
 
 ### Non-existing end point
 DELETE {{HOST}}:{{PORT}}/
-
-###
-GET {{HOST}}:{{PORT}}/{{API}}/users/daniel
-Access-Token: erererer
-
-###
-POST {{HOST}}:{{PORT}}/{{API}}/auth
-Content-Type: application/json
-
-{
-  "clientIdentifier": "Dexter4873",
-  "clientSecret": "password"
-}
-
-### Sign Up
-POST {{HOST}}:{{PORT}}/{{API}}/signup
-Content-Type: application/json
-
-{
-  "username": "antony12",
-  "email": "antony12@gmail.com",
-  "birthday": "2004-12-4",
-  "password": "password"
-}

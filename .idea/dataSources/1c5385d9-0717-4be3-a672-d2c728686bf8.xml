@@ -13,26 +13,6 @@
       <Current>1</Current>
     </schema>
     <schema id="8" parent="1" name="users"/>
-    <table id="9" parent="6" name="user"/>
-    <column id="10" parent="9" name="_id">
-      <DasType>ObjectId|12s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="11" parent="9" name="birthday">
-      <DasType>String|12s</DasType>
-      <Position>2</Position>
-    </column>
-    <column id="12" parent="9" name="email">
-      <DasType>String|12s</DasType>
-      <Position>3</Position>
-    </column>
-    <column id="13" parent="9" name="password">
-      <DasType>String|12s</DasType>
-      <Position>4</Position>
-    </column>
-    <column id="14" parent="9" name="username">
-      <DasType>String|12s</DasType>
-      <Position>5</Position>
-    </column>
+    <table id="9" parent="6" name="accounts"/>
   </database-model>
 </dataSource>

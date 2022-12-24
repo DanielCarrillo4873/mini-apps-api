@@ -10,22 +10,21 @@ import contentTypeJson from '../middlewares/content-type-json.js';
 import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
 import { newAccountRequestSchema, updateAccountRequestSchema } from '../request-body-schemas/accounts.requestschema.js';
 import {
-  getAccount, createAccount, updateAccount, deleteAccount,
+  getAccountController, createAccountController, updateAccountController, deleteAccountController,
 } from '../controllers/accounts.controller.js';
-import authentication from '../middlewares/authentication.js';
 
 const router = new Router();
 
 // Get account information by username
-router.get('/:username', authentication, getAccount);
+router.get('/:username', getAccountController);
 
 // Create new account - Sing up
-router.post('/', contentTypeJson, requestBodySchemaValidation(newAccountRequestSchema), createAccount);
+router.post('/', contentTypeJson, requestBodySchemaValidation(newAccountRequestSchema), createAccountController);
 
 // Update account information
-router.patch('/:username', requestBodySchemaValidation(updateAccountRequestSchema), authentication, updateAccount);
+router.patch('/:username', requestBodySchemaValidation(updateAccountRequestSchema), updateAccountController);
 
 // Delete account by username - Delete account
-router.delete('/:username', authentication, deleteAccount);
+router.delete('/:username', deleteAccountController);
 
 export default router;

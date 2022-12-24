@@ -1,9 +1,9 @@
-/*
+/**
 *
-*   Content type json
-*   Middleware to test content type to be json
+*   Content type json middleware
+*   Test content type of request to be json
 *
-*   - Check content type for request to be json
+*   - Check content type for request header to be json
 *
 * */
 

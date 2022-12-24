@@ -1,9 +1,9 @@
-/*
+/**
 *
 *   Database
 *   MongoDbClient main instance
 *
-*   - Creates mongodb connection instance
+*   - Creates mongodb connection client instance
 *
 * */
 

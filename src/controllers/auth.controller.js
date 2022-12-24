@@ -1,4 +1,4 @@
-/*
+/**
 *
 *   Auth
 *   Authenticate users controller

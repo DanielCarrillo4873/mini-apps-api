@@ -1,0 +1,28 @@
+### Create account
+POST {{HOST}}:{{PORT}}/{{API}}/accounts
+Content-Type: application/json
+
+{
+  "username": "dexter4873",
+  "email": "dexter4873@gmail.com",
+  "password": "password",
+  "name": "Daniel",
+  "firstLastname": "Carrillo",
+  "secondLastname": "Sanchez",
+  "birthday": "1998-10-16"
+}
+
+### Get account by username
+GET {{API_URL}}accounts/dexter4873
+
+### Update account info
+PATCH {{API_URL}}accounts/dexter4873
+Content-Type: application/json
+
+{
+  "name": "David",
+  "firstLastname": "Avila"
+}
+
+### Delete an account
+DELETE {{API_URL}}accounts/dexter4873

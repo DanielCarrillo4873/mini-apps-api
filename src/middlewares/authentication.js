@@ -1,7 +1,7 @@
-/*
+/**
 *
 *   Authentication middleware
-*   Middleware to verify access-token and validate authorization header in request
+*   Verify access-token and validate authorization header in request
 *
 *   - Check Authorization header present in request
 *   - Verify access token

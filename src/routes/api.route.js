@@ -11,29 +11,29 @@ import contentTypeJson from '../middlewares/content-type-json.js';
 import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
 import { authenticateUserSchema } from '../request-body-schemas/accounts.requestschema.js';
 import authController from '../controllers/auth.controller.js';
+import { entryPointController, signupController } from '../controllers/api.controller.js';
 
 const router = Router();
 
 // Entry point
-router.get('/', (req, res) => {
-  res.json({
-    title: 'Mini-Apps-API',
-    description: 'Mini apps api, all resources, operations, authentication and authorization.',
-    version: 1,
-    ok: 1,
-  });
-});
+router.get('/', entryPointController);
 
 // Authentication route
-router.post('/auth', contentTypeJson, requestBodySchemaValidation(authenticateUserSchema), authController);
+router.post(
+  '/auth',
+  contentTypeJson,
+  requestBodySchemaValidation(authenticateUserSchema),
+  authController,
+);
 
 // Sign up route
-router.post('/signup', (req, res) => {
-  // noinspection JSDeprecatedSymbols
-  res.redirect('accounts', 308);
-});
+router.post('/signup', signupController);
 
 // Users routes
-router.use('/accounts', accountsRouter);
+router.use(
+  '/accounts',
+  contentTypeJson,
+  accountsRouter,
+);
 
 export default router;

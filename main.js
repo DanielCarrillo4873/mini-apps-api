@@ -4,7 +4,7 @@
 *   Application entry point
 *
 *   - Loads settings for application
-*   - Connects to database
+*   - Connects mongoose to database
 *   - Run HTTP server if needed requirements are present
 *
 *   **** Needed requirements ****
@@ -13,11 +13,12 @@
 *
 * */
 
-import { PORT } from './src/settings.js';
-import mongoClient from './src/database.js';
+import mongoose from 'mongoose';
+import { PORT, DATABASE_URI } from './src/settings.js';
 import server from './src/server.js';
 
-mongoClient.db().command({ ping: 1 })
+mongoose.set('strictQuery', false);
+mongoose.connect(DATABASE_URI)
   .then(() => {
     console.log('Database connected');
     server.listen(PORT, () => {

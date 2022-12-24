@@ -1,14 +1,13 @@
 /**
-*
-*   Accounts Controllers
-*   Function definitions for Account controllers
-*
-*   - Get an account by username
-*   - Create an account
-*   - Update an account by username
-*   - Delete an account by username
-*
-* */
+ *
+ *   Accounts Controllers
+ *
+ *   - Get an account by username
+ *   - Create an account
+ *   - Update an account by username
+ *   - Delete an account by username
+ *
+ * */
 
 import { serverError, requestBodySchemaInvalid, resourceNotFound } from '../response-errors.js';
 import {
@@ -44,7 +43,7 @@ export async function createAccountController(req, res) {
     res.status(201);
     res.json({ id });
   } catch ({ code, keyValue }) {
-    if (code === 11000) {
+    if (code === 11000) { // MongoServerError, keys is not unique
       const [field, value] = Object.entries(keyValue)[0];
       res.status(400);
       res.json(requestBodySchemaInvalid(field, `${field} already exist.`, value));
@@ -65,7 +64,7 @@ export async function updateAccountController(req, res) {
     const updated = await updateAccount(username, data);
     res.json(updated);
   } catch (e) {
-    if (e instanceof TypeError) {
+    if (e instanceof TypeError) { // Username not exist
       res.status(400);
       res.json(resourceNotFound('account', 'username', username));
     } else {
@@ -84,7 +83,7 @@ export async function deleteAccountController(req, res) {
     await deleteAccount(username);
     res.json({ ok: 1 });
   } catch (e) {
-    if (e instanceof TypeError) {
+    if (e instanceof TypeError) { // Username not exist
       res.status(400);
       res.json(resourceNotFound('accounts', 'username', username));
     } else {

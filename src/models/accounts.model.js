@@ -54,8 +54,7 @@ export async function getByUsername(username) {
       },
     },
   ]).toArray();
-  // Account not found
-  if (!account) throw new TypeError();
+  if (!account) throw new TypeError(); // Account not found
   return account;
 }
 
@@ -74,8 +73,7 @@ export async function getByUsername(username) {
  * @returns {Promise<String>} - Account id
  */
 export async function createAccount(data) {
-  // Encrypt password
-  const hashedPassword = await hash(data.password, SALTS);
+  const hashedPassword = await hash(data.password, SALTS); // Encrypt password
   const res = await Accounts.insertOne({
     username: data.username,
     email: data.email,

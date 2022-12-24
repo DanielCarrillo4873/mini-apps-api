@@ -1,13 +1,14 @@
 /**
-*
-*   Server
-*   Main HTTP instance
-*
-*   - Creates express instance
-*   - Set main middlewares
-*   - Set main routes
-*
-* */
+ *
+ *   Server
+ *   Main express instance
+ *
+ *   - Creates express instance
+ *   - Set main middlewares
+ *   - Set dev middlewares
+ *   - Set main routes
+ *
+ */
 
 import express from 'express';
 import morgan from 'morgan';
@@ -15,12 +16,17 @@ import { endPointNotFound } from './response-errors.js';
 import apiRouter from './routes/api.route.js';
 import { NODE_ENV } from './settings.js';
 
+/**
+ * Main express instance
+ * @type {Express}
+ * @constant
+ */
 const server = express();
 
-// Middlewares
+//  ********** Middlewares **********
 server.use(express.json());
 
-// Dev middlewares
+// ********** Dev middlewares **********
 if (NODE_ENV === 'DEVELOPMENT') {
   server.use(morgan('dev'));
 }

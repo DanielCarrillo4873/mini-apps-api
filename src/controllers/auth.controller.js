@@ -1,13 +1,10 @@
 /**
-*
-*   Auth
-*   Authenticate users controller
-*
-*   - Authenticates a user by password and username or email
-*   - Creates a valid token if password and username or email are valid
-*   - Send valid token as json
-*
-* */
+ *
+ *   Authentication Controller
+ *
+ *   - Authenticate user with email or username and assign access-token
+ *
+ */
 
 import jsonwebtoken from 'jsonwebtoken';
 import { compare } from 'bcrypt';

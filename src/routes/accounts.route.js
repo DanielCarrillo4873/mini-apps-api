@@ -1,30 +1,64 @@
-/*
-*
-*   Users Routes
-*   Users end points map to controllers and middleware assignment
-*
+/**
+ *
+ *   Users Routes
+ *
+ *   - Get account by username
+ *   - Create account
+ *   - Update allowed data account by username
+ *   - Deleter account by username
+ *
  */
 
 import { Router } from 'express';
-import contentTypeJson from '../middlewares/content-type-json.js';
+
+// ********** Middlewares **********
 import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
-import { newAccountRequestSchema, updateAccountRequestSchema } from '../request-body-schemas/accounts.requestschema.js';
+import authentication from '../middlewares/authentication.js';
+
+// ********** Request body schema **********
 import {
-  getAccountController, createAccountController, updateAccountController, deleteAccountController,
+  newAccountRequestSchema,
+  updateAccountRequestSchema,
+} from '../request-body-schemas/accounts.requestschema.js';
+
+// ********** Controllers **********
+import {
+  getAccountController,
+  createAccountController,
+  updateAccountController,
+  deleteAccountController,
 } from '../controllers/accounts.controller.js';
 
 const router = new Router();
 
+// ********** Routes **********
 // Get account information by username
-router.get('/:username', getAccountController);
+router.get(
+  '/:username',
+  authentication,
+  getAccountController,
+);
 
 // Create new account - Sing up
-router.post('/', contentTypeJson, requestBodySchemaValidation(newAccountRequestSchema), createAccountController);
+router.post(
+  '/',
+  requestBodySchemaValidation(newAccountRequestSchema),
+  createAccountController,
+);
 
 // Update account information
-router.patch('/:username', requestBodySchemaValidation(updateAccountRequestSchema), updateAccountController);
+router.patch(
+  '/:username',
+  authentication,
+  requestBodySchemaValidation(updateAccountRequestSchema),
+  updateAccountController,
+);
 
 // Delete account by username - Delete account
-router.delete('/:username', deleteAccountController);
+router.delete(
+  '/:username',
+  authentication,
+  deleteAccountController,
+);
 
 export default router;

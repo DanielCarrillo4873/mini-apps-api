@@ -1,12 +1,10 @@
 /**
-*
-*   Authentication middleware
-*   Verify access-token and validate authorization header in request
-*
-*   - Check Authorization header present in request
-*   - Verify access token
-*
-* */
+ *
+ *   Authentication middleware
+ *
+ *   - Authentication
+ *
+ */
 
 import jsonwebtoken from 'jsonwebtoken';
 import { noAccessToken, accessTokenInvalid } from '../response-errors.js';

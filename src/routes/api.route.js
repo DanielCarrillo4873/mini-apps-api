@@ -1,20 +1,33 @@
 /**
-*
-*   API Routes
-*   API end points and map to controllers and middlewares assigment
-*
- * */
+ *
+ *   API Router
+ *
+ *   - Entry point
+ *   - Auth
+ *   - Sigh up
+ *   - Accounts
+ *
+ */
 
 import { Router } from 'express';
+
+// ********** Routers **********
 import accountsRouter from './accounts.route.js';
+
+// ********** Middlewares **********
 import contentTypeJson from '../middlewares/content-type-json.js';
 import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
+
+// ********** Request body schema **********
 import { authenticateUserSchema } from '../request-body-schemas/accounts.requestschema.js';
+
+// ********** Controllers **********
 import authController from '../controllers/auth.controller.js';
 import { entryPointController, signupController } from '../controllers/api.controller.js';
 
 const router = Router();
 
+// ********** Routes **********
 // Entry point
 router.get('/', entryPointController);
 

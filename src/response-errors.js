@@ -1,10 +1,10 @@
 /**
-*
-*   Response-errors
-*   Creates responses body for unsuccessful operations and errors that occur
-*
-*   - Definition for functions and objects that structure body responses for errors
-*
+ *
+ *   Response-errors
+ *   Creates responses body for unsuccessful operations and errors
+ *
+ *   - Definition for functions and objects that structure body error responses
+ *
  */
 
 /**

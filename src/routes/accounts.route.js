@@ -14,6 +14,7 @@ import { Router } from 'express';
 // ********** Middlewares **********
 import requestBodySchemaValidation from '../middlewares/request-body-schema-validation.js';
 import authentication from '../middlewares/authentication.js';
+import contentTypeJson from '../middlewares/content-type-json.js';
 
 // ********** Request body schema **********
 import {
@@ -42,6 +43,7 @@ router.get(
 // Create new account - Sing up
 router.post(
   '/',
+  contentTypeJson,
   requestBodySchemaValidation(newAccountRequestSchema),
   createAccountController,
 );
@@ -50,6 +52,7 @@ router.post(
 router.patch(
   '/:username',
   authentication,
+  contentTypeJson,
   requestBodySchemaValidation(updateAccountRequestSchema),
   updateAccountController,
 );

@@ -8,7 +8,7 @@
  *
  */
 
-import { sign, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import {
   JWT_KEY, JWT_AL, JWT_EXP_TIME, JWT_ENABLE_EXP,
 } from '../settings.js';
@@ -20,7 +20,7 @@ import {
  */
 export function signToken(data) {
   return new Promise((resolve, reject) => {
-    sign(
+    jwt.sign(
       data,
       JWT_KEY,
       {
@@ -42,7 +42,7 @@ export function signToken(data) {
  */
 export function verifyToken(token) {
   return new Promise((resolve, reject) => {
-    verify(
+    jwt.verify(
       token,
       JWT_KEY,
       {

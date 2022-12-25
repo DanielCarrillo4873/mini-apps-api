@@ -45,7 +45,6 @@ router.post('/signup', signupController);
 // Users routes
 router.use(
   '/accounts',
-  contentTypeJson,
   accountsRouter,
 );
 

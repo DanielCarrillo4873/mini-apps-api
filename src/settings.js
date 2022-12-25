@@ -35,7 +35,31 @@ export const DATABASE_URI = process.env.DATABASE_URI || 'mongodb://localhost/min
  * @default JS0NW3BT0K3NY
  * @constant}
  */
-export const JSONWEBTOKEN_KEY = process.env.JSONWEBTOKEN_KEY || 'JS0NW3BT0K3NK3Y';
+export const JWT_KEY = process.env.JSONWEBTOKEN_KEY || 'JS0NW3BT0K3NK3Y';
+
+/**
+ * JWT expiration time
+ * @type {String}
+ * @default 5m
+ * @constant
+ */
+export const JWT_EXP_TIME = process.env.JWT_EPIRATION_TIME || '5m';
+
+/**
+ * JWT algorithm to sign token
+ * @type {String}
+ * @default HS256
+ * @constant
+ */
+export const JWT_AL = process.env.JWT_ALGORITHM || 'HS256';
+
+/**
+ * JWT expiration enable o disable
+ * @type {Boolean}
+ * @default true
+ * @constant
+ */
+export const JWT_ENABLE_EXP = process.env.JWT_ENALBE_EXP || true;
 
 /**
  * Application mode

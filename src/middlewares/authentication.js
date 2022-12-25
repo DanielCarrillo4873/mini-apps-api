@@ -6,22 +6,21 @@
  *
  */
 
-import jsonwebtoken from 'jsonwebtoken';
 import { noAccessToken, accessTokenInvalid } from '../response-errors.js';
-import { JSONWEBTOKEN_KEY } from '../settings.js';
+import { verifyToken } from '../utils/jwtFunctions.js';
 
-function authentication(req, res, next) {
+/**
+ * Verify authorization header is present and access token validity
+ */
+async function authentication(req, res, next) {
   const accessToken = req.get('authorization');
   if (accessToken) {
-    jsonwebtoken.verify(accessToken, JSONWEBTOKEN_KEY, {}, (err, decoded) => {
-      if (err) {
-        res.status(400);
-        res.json(accessTokenInvalid(accessToken));
-      } else {
-        req.decoded = decoded;
-        next();
-      }
-    });
+    try {
+      req.decoded = await verifyToken(accessToken);
+      next();
+    } catch {
+      res.status(401).json(accessTokenInvalid(accessToken));
+    }
   } else {
     res.status(400);
     res.json(noAccessToken);

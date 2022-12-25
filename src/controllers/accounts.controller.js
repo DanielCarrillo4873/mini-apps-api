@@ -23,12 +23,10 @@ export async function getAccountController(req, res) {
     const account = await getByUsername(username);
     res.json(account);
   } catch (e) {
-    if (e instanceof TypeError) {
-      res.status(400);
-      res.json(resourceNotFound('accounts', 'username', username));
+    if (e.name === 'UsernameNotExist') {
+      res.status(400).json(resourceNotFound('accounts', 'username', username));
     } else {
-      res.status(500);
-      res.json(serverError);
+      res.status(500).json(serverError);
     }
   }
 }
@@ -40,16 +38,12 @@ export async function createAccountController(req, res) {
   try {
     const data = req.body;
     const id = await createAccount(data);
-    res.status(201);
-    res.json({ id });
-  } catch ({ code, keyValue }) {
-    if (code === 11000) { // MongoServerError, keys is not unique
-      const [field, value] = Object.entries(keyValue)[0];
-      res.status(400);
-      res.json(requestBodySchemaInvalid(field, `${field} already exist.`, value));
+    res.status(201).json({ id });
+  } catch (e) {
+    if (e.name === 'IdentifierAlreadyExist') {
+      res.status(400).json(requestBodySchemaInvalid(e.key, e.message, e.value));
     } else {
-      res.status(500);
-      res.json(serverError);
+      res.status(500).json(serverError);
     }
   }
 }
@@ -64,12 +58,10 @@ export async function updateAccountController(req, res) {
     const updated = await updateAccount(username, data);
     res.json(updated);
   } catch (e) {
-    if (e instanceof TypeError) { // Username not exist
-      res.status(400);
-      res.json(resourceNotFound('account', 'username', username));
+    if (e.name === 'UsernameNotExist') {
+      res.status(400).json(resourceNotFound('account', 'username', username));
     } else {
-      res.status(500);
-      res.json(serverError);
+      res.status(500).json(serverError);
     }
   }
 }
@@ -83,12 +75,10 @@ export async function deleteAccountController(req, res) {
     await deleteAccount(username);
     res.json({ ok: 1 });
   } catch (e) {
-    if (e instanceof TypeError) { // Username not exist
-      res.status(400);
-      res.json(resourceNotFound('accounts', 'username', username));
+    if (e.name === 'UsernameNotExist') {
+      res.status(400).json(resourceNotFound('accounts', 'username', username));
     } else {
-      res.status(500);
-      res.json(serverError);
+      res.status(500).json(serverError);
     }
   }
 }

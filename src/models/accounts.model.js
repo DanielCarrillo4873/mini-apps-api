@@ -33,7 +33,7 @@ export const Accounts = mongoClient.db().collection('accounts');
  * Get a user using unique username
  * @async
  * @param {String} username - Account associated username
- * @throws {TypeError} - username does not exist
+ * @throws {Error} - username does not exist
  * @returns {Account} - Account information
  */
 export async function getByUsername(username) {
@@ -54,7 +54,11 @@ export async function getByUsername(username) {
       },
     },
   ]).toArray();
-  if (!account) throw new TypeError(); // Account not found
+  if (!account) {
+    const e = new Error();
+    e.name = 'UsernameNotExist';
+    throw e;
+  } // Account not found
   return account;
 }
 
@@ -74,7 +78,8 @@ export async function getByUsername(username) {
  */
 export async function createAccount(data) {
   const hashedPassword = await hash(data.password, SALTS); // Encrypt password
-  const res = await Accounts.insertOne({
+
+  const newAccount = {
     username: data.username,
     email: data.email,
     password: hashedPassword,
@@ -83,8 +88,23 @@ export async function createAccount(data) {
     secondLastname: data.secondLastname || null,
     birthday: data.birthday,
     creationDate: new Date(),
-  });
-  return res.insertedId.toString();
+  };
+
+  try {
+    const res = await Accounts.insertOne(newAccount);
+    return res.insertedId.toString();
+  } catch (e) {
+    if (e.code === 11000) {
+      const [key, value] = Object.entries(e.keyValue);
+      const error = new Error(`${key} already exist.`);
+      error.name = 'IdentifierAlreadyExist';
+      error.key = key;
+      error.value = value;
+      throw error;
+    } else {
+      throw e;
+    }
+  }
 }
 
 /**
@@ -96,12 +116,16 @@ export async function createAccount(data) {
  *   firstLastname?: String,
  *   secondLastname?: String,
  * }} data - Data to update account information
- * @throws {TypeError} - Username does not exist
+ * @throws {Error} - Username does not exist
  * @returns {Account} - Account information updated
  */
 export async function updateAccount(username, data) {
   const res = await Accounts.updateOne({ username }, { $set: data });
-  if (res.matchedCount === 0) throw new TypeError();
+  if (res.matchedCount === 0) {
+    const e = new Error();
+    e.name = 'UsernameNot exist';
+    throw e;
+  }
   return getByUsername(username);
 }
 
@@ -109,11 +133,15 @@ export async function updateAccount(username, data) {
  * Deletes an account by username
  * @async
  * @param {String} username - Username to delete account
- * @throws {TypeError} Username does not exist
+ * @throws {Error} Username does not exist
  */
 export async function deleteAccount(username) {
   const res = await Accounts.deleteOne({ username });
-  if (res.deletedCount === 0) throw new TypeError();
+  if (res.deletedCount === 0) {
+    const e = new Error();
+    e.name = 'UsernameNotExist';
+    throw e;
+  }
 }
 
 /**

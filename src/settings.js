@@ -76,3 +76,11 @@ export const NODE_ENV = 'DEVELOPMENT';
  * @constant
  */
 export const SALTS = 10;
+
+/**
+ * Enable authentication
+ * @type {Boolean}
+ * @default false
+ * @constant
+ */
+export const ENABLE_AUTH = process.env.ENABLE_AUTH || false;

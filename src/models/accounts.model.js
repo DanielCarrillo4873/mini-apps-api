@@ -95,7 +95,7 @@ export async function createAccount(data) {
     return res.insertedId.toString();
   } catch (e) {
     if (e.code === 11000) {
-      const [key, value] = Object.entries(e.keyValue);
+      const [key, value] = Object.entries(e.keyValue)[0];
       const error = new Error(`${key} already exist.`);
       error.name = 'IdentifierAlreadyExist';
       error.key = key;

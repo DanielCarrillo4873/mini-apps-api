@@ -22,7 +22,7 @@
  * @property {Date} creationDate - account creation date
  */
 
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { SALTS } from '../settings.js';
 import mongoClient from '../database.js';
 
@@ -114,4 +114,36 @@ export async function updateAccount(username, data) {
 export async function deleteAccount(username) {
   const res = await Accounts.deleteOne({ username });
   if (res.deletedCount === 0) throw new TypeError();
+}
+
+/**
+ * Authenticates a user
+ * @async
+ * @param {String} clientIdentifier - Email o username to identify an account
+ * @param {String} clientSecret - Password to authenticate user
+ * @throws {Error} clientIdentifier not found
+ * @throws {Error} clientSecret not math
+ */
+export async function authenticate(clientIdentifier, clientSecret) {
+  const account = await Accounts.findOne({
+    $or: [{ username: clientIdentifier }, { email: clientIdentifier }],
+  });
+
+  if (!account) {
+    const e = new Error('Client identifier not found');
+    e.name = 'ClientIdentifierNotFound';
+    throw e;
+  }
+
+  const match = await compare(clientSecret, account.password);
+  if (!match) {
+    const e = new Error('Client secret not match');
+    e.name = 'ClientSecretNotMatch';
+    throw e;
+  }
+
+  account.id = account._id;
+  delete account._id;
+  delete account.password;
+  return account;
 }

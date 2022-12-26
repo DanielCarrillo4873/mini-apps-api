@@ -2,10 +2,10 @@
   "name": "mini-apps-api",
   "version": "1.0.0",
   "description": "API Rest for mini apps",
-  "main": "main.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "serve": "nodemon main.js",
+    "serve": "nodemon .",
     "start": "node .",
     "test": "jest"
   },

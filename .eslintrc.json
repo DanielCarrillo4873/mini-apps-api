@@ -16,6 +16,8 @@
       "import/no-extraneous-dependencies": [
         "error", {"devDependencies": true}
       ],
-      "no-underscore-dangle": "off"
+      "no-underscore-dangle": "off",
+      "no-use-before-define": "off",
+      "max-classes-per-file": "off"
     }
 }

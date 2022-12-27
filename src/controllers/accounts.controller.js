@@ -41,7 +41,7 @@ export async function createAccountController(req, res) {
     res.status(201).json({ id });
   } catch (e) {
     if (e.name === 'IdentifierAlreadyExist') {
-      res.status(400).json(requestBodySchemaInvalid(e.key, e.message, e.value));
+      res.status(400).json(requestBodySchemaInvalid(e.identifier, e.message, e.value));
     } else {
       res.status(500).json(serverError);
     }

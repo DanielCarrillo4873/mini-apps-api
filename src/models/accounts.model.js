@@ -2,6 +2,10 @@
  *
  *  Accounts Model
  *
+ *  - Username not exist - error class
+ *  - Identifier not unique - error class
+ *  - ClientIdentifier not found - error class
+ *  - ClientSecret not match - error class
  *  - Get account by username
  *  - Create account
  *  - Update account by username
@@ -9,6 +13,14 @@
  *
  */
 
+import { hash, compare } from 'bcrypt';
+import { SALTS } from '../settings.js';
+import mongoClient from '../database.js';
+
+// Accounts collection
+export const Accounts = mongoClient.db().collection('accounts');
+
+// ********** Data definition **********
 /**
  * An account
  * @typedef  {object} Account
@@ -22,13 +34,75 @@
  * @property {Date} creationDate - account creation date
  */
 
-import { hash, compare } from 'bcrypt';
-import { SALTS } from '../settings.js';
-import mongoClient from '../database.js';
+// ********** Error classes **********
+/**
+ * Username not found error
+ * @extends Error
+ * @property {String} value - username value
+ */
+class UsernameNotFound extends Error {
+  /**
+   * @constructor
+   * @param {String} username - Username that not exist
+   */
+  constructor(username) {
+    super('Username already exist');
+    this.name = 'UsernameNotFound';
+    this.value = username;
+  }
+}
 
-// Accounts collection
-export const Accounts = mongoClient.db().collection('accounts');
+/**
+ * Identifier not unique Error
+ * @extends Error
+ * @property {String} identifier - identifier that is not unique
+ * @property {String} value - Value of not unique identifier
+ */
+class IdentifierNotUnique extends Error {
+  /**
+   * @constructor
+   * @param {String} identifier - Identifier not unique
+   * @param {String} value - Value of not unique identifier
+   */
+  constructor(identifier, value) {
+    super(`${identifier} already exist`);
+    this.name = 'IdentifierAlreadyExist';
+    this.identifier = identifier;
+    this.value = value;
+  }
+}
 
+/**
+ * Client identifier not found
+ * @extends Error
+ * @property {String} value - Value of not found ClientIdentifier
+ */
+class ClientIdentifierNotFound extends Error {
+  /**
+   * @constructor
+   * @param {String} clientIdentifier - ClientIdentifier not found
+   */
+  constructor(clientIdentifier) {
+    super('Client Identifier not found');
+    this.name = 'ClientIdentifierNotFound';
+    this.value = clientIdentifier;
+  }
+}
+
+/**
+ * Clint secret not match error
+ */
+class ClientSecretNotMach extends Error {
+  /**
+   * @constructor
+   */
+  constructor() {
+    super('Client secret not match');
+    this.name = 'ClientSecretNotMatch';
+  }
+}
+
+// ********** Controller functions **********
 /**
  * Get a user using unique username
  * @async
@@ -54,11 +128,7 @@ export async function getByUsername(username) {
       },
     },
   ]).toArray();
-  if (!account) {
-    const e = new Error();
-    e.name = 'UsernameNotExist';
-    throw e;
-  } // Account not found
+  if (!account) throw new UsernameNotFound(username);
   return account;
 }
 
@@ -77,9 +147,13 @@ export async function getByUsername(username) {
  * @returns {Promise<String>} - Account id
  */
 export async function createAccount(data) {
-  const hashedPassword = await hash(data.password, SALTS); // Encrypt password
+  // Check username and email to be unique
+  const checkUnique = await checkUniqueIdentifier(data.username, data.email);
+  if (checkUnique.username) throw new IdentifierNotUnique('username', data.username);
+  if (checkUnique.email) throw new IdentifierNotUnique('Email', data.email);
 
-  const newAccount = {
+  const hashedPassword = await hash(data.password, SALTS); // Encrypt password
+  const res = await Accounts.insertOne({
     username: data.username,
     email: data.email,
     password: hashedPassword,
@@ -88,23 +162,8 @@ export async function createAccount(data) {
     secondLastname: data.secondLastname || null,
     birthday: data.birthday,
     creationDate: new Date(),
-  };
-
-  try {
-    const res = await Accounts.insertOne(newAccount);
-    return res.insertedId.toString();
-  } catch (e) {
-    if (e.code === 11000) {
-      const [key, value] = Object.entries(e.keyValue)[0];
-      const error = new Error(`${key} already exist.`);
-      error.name = 'IdentifierAlreadyExist';
-      error.key = key;
-      error.value = value;
-      throw error;
-    } else {
-      throw e;
-    }
-  }
+  });
+  return res.insertedId;
 }
 
 /**
@@ -121,11 +180,7 @@ export async function createAccount(data) {
  */
 export async function updateAccount(username, data) {
   const res = await Accounts.updateOne({ username }, { $set: data });
-  if (res.matchedCount === 0) {
-    const e = new Error();
-    e.name = 'UsernameNot exist';
-    throw e;
-  }
+  if (res.matchedCount === 0) throw new UsernameNotFound(username);
   return getByUsername(username);
 }
 
@@ -137,11 +192,7 @@ export async function updateAccount(username, data) {
  */
 export async function deleteAccount(username) {
   const res = await Accounts.deleteOne({ username });
-  if (res.deletedCount === 0) {
-    const e = new Error();
-    e.name = 'UsernameNotExist';
-    throw e;
-  }
+  if (res.deletedCount === 0) throw new UsernameNotFound(username);
 }
 
 /**
@@ -156,22 +207,45 @@ export async function authenticate(clientIdentifier, clientSecret) {
   const account = await Accounts.findOne({
     $or: [{ username: clientIdentifier }, { email: clientIdentifier }],
   });
-
-  if (!account) {
-    const e = new Error('Client identifier not found');
-    e.name = 'ClientIdentifierNotFound';
-    throw e;
-  }
+  if (!account) throw new ClientIdentifierNotFound(clientIdentifier);
 
   const match = await compare(clientSecret, account.password);
-  if (!match) {
-    const e = new Error('Client secret not match');
-    e.name = 'ClientSecretNotMatch';
-    throw e;
-  }
+  if (!match) throw new ClientSecretNotMach();
 
   account.id = account._id;
   delete account._id;
   delete account.password;
   return account;
+}
+
+// ********** Aux functions **********
+/**
+ * Check uniqueness of username and email
+ * @async
+ * @param {String} username - username to check
+ * @param {String} email - email to check
+ * @returns {Promise<Document>}
+ */
+async function checkUniqueIdentifier(username, email) {
+  const [res] = await Accounts.aggregate([
+    {
+      $facet: {
+        email: [
+          { $match: { email } },
+          { $count: 'count' },
+        ],
+        username: [
+          { $match: { username } },
+          { $count: 'count' },
+        ],
+      },
+    },
+    {
+      $project: {
+        email: { $getField: { field: 'count', input: { $first: '$email' } } },
+        username: { $getField: { field: 'count', input: { $first: '$username' } } },
+      },
+    },
+  ]).toArray();
+  return res;
 }

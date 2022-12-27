@@ -20,18 +20,12 @@ export default async function auth(req, res) {
     const token = await signToken(data);
     res.json({ token });
   } catch (e) {
-    let status;
-    let json;
     if (e.name === 'ClientIdentifierNotFound') {
-      status = 400;
-      json = requestBodySchemaInvalid('clientIdentifier', e.message, clientIdentifier);
+      res.status(400).json(requestBodySchemaInvalid('clientIdentifier', e.message, clientIdentifier));
     } else if (e.name === 'ClientSecretNotMatch') {
-      status = (400);
-      json = requestBodySchemaInvalid('clientSecret', e.message, clientSecret);
+      res.status(400).json(requestBodySchemaInvalid('clientSecret', e.message, clientSecret));
     } else {
-      status = 500;
-      json = serverError;
+      res.status(500).json(serverError);
     }
-    res.status(status).json(json);
   }
 }
